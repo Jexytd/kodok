@@ -37,8 +37,10 @@ function CheckKey(str, total)
 	end
 
 	if sums == total then
+		print('Decrypting key done!')
 		return sums
 	else
+		print('Failed to decrypting the key')
 		return -1
 	end
 	return
