@@ -1,4 +1,5 @@
-function SendWH(TT, DS, CLR)
+function SendWH(URL, TT, DS, CLR)
+    assert(URL, 'Unable to continue the function.')
     assert(TT and DS, 'Please insert this arguments, really important on function')
     local EMBED = {
         ['embeds'] = {
@@ -16,7 +17,6 @@ function SendWH(TT, DS, CLR)
             }
         }
     }
-    local URL = 'https://discord.com/api/webhooks/1040808083393355866/oxThsymDTlShWD9uL8PCxS6sTSfE7Y3E_UNQqfwB7zR5MxDkT7XoDUkvSEnAYogTbgY-'
     return request({Url = URL, Method = 'POST', Headers = {["Content-Type"] = "application/json"}, Body = game:GetService("HttpService"):JSONEncode(EMBED)})
 end
 
