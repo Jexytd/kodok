@@ -11,6 +11,8 @@ elseif ResponseKey == -1 then
     return 1;
 end
 
+print('Key checker passed!')
+
 -- / Send discord webhook /--
 getgenv().wSend = loadstring(SIMP:Get('https://raw.githubusercontent.com/Jexytd/kodok/main/Webhook.lua'))()
 
@@ -22,6 +24,8 @@ if ResponseGame == 1 then
 elseif ResponseGame == 'UNIVERSAL' then
 	UNIVERSAL = true;
 end
+
+print('Game checker passed!')
 
 local UI = loadstring(SIMP:Get('https://raw.githubusercontent.com/Jexytd/kodok/main/UI.lua'))()
 
