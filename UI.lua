@@ -34,15 +34,25 @@ function GUI:Get(n)
     local idx = n or 1;
     local sum = 1;
     local instance;
-    for k,v in pairs(GUI) do
-        if typeof(v) == 'Instance' and type(k) == 'string' then
-            instance = v;
+
+    if n then
+        for k,v in pairs(GUI) do
+            if typeof(v) == 'Instance' and type(k) == 'string' then
+                instance = v;
+            end
+
+            sum = sum + 1
+
+            if idx < sum then
+                break;
+            end
         end
-
-        sum = sum + 1
-
-        if idx < sum then
-            break;
+    else
+        for k, v in pairs(GUI) do
+            if typeof(v) == 'Instance' and type(k) == 'string' then
+                instance = v;
+                break;
+            end
         end
     end
     return instance
