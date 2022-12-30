@@ -13,7 +13,7 @@ function SIMP:Get(URL)
     return state
 end
 
-function SIMP:NewInstance(instance, properties, ...)
+function SIMP:NewInstance(instance, properties, children)
     assert(instance, 'Please insert instance')
     local instances = Instance.new(instance);
     local properties = properties or {};
@@ -22,7 +22,7 @@ function SIMP:NewInstance(instance, properties, ...)
         instances[k] = v;
     end
 
-    local children = {...}
+    local children = children or {}
     if #children > 0 then
         for k, v in pairs(children) do
             if typeof(v) == 'Instance' then
