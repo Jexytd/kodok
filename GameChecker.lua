@@ -11,6 +11,7 @@ function RightGame(p1)
 		if tGameId:find(tostring(p1)) then
 			set = INDEXs;
 		end
+		INDEXs = INDEXs + 1
     until INDEXs == #GameList
 	if INDEXs ~= #GameList then
 		return 1;
