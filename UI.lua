@@ -1,3 +1,10 @@
+--/ End Goal: Support on Mobile or Compatible on android / mobile
+--[[
+    To-do:
+        Auto-load / Manual load previous settings / Save ui setting's,
+        Creating intro on loader
+]]
+
 local UI = {};
 local SIMP = loadstring(game:HttpGet('https://raw.githubusercontent.com/Jexytd/kodok/main/SimpleCode.lua'))()
 
@@ -23,6 +30,7 @@ function GUI:Destroy(index)
     
     local instance = GUI:Get(index);
     if instance then
+        GUI[instance] = nil;
         instance:Destroy();
         return true;
     end
@@ -61,7 +69,7 @@ end
 function GUI:Setup(options)
     assert(options, 'Please select an option to continue the function.')
 
-    local listOptions = {'loading', 'notification', 'ingame', 'universal', 'settings'}
+    local listOptions = {'loading', 'notification', 'ingame', 'universal', 'settings', 'keys'}
     local start = (table.concat(listOptions, ' ')):find(options[1]:lower());
 
     assert(start, 'The options not matched as on list, please select option between on the list')
@@ -72,6 +80,57 @@ function GUI:Setup(options)
     local holder_folder = gui:FindFirstChild('UI_Holder');
 
     tUI = {};
+
+    function tUI:Get()
+        for _,v in pairs(tUI) do
+            if type(v) ~= 'function' then
+                return v;
+            end
+        end
+    end
+
+    function tUI:OnMouse()
+        local baseUI = tUI:Get();
+        assert(baseUI, 'Couldn\'t find the base of it')
+
+        local camera = workspace.CurrentCamera;
+        local viewportSize = camera.ViewportSize;
+
+        local xPersen = (baseUI.Position.X.Scale / 1) * 100;
+        local yPersen = (baseUI.Position.Y.Scale / 1) * 100;
+
+        local x = (xPersen / 100) * viewportSize.X;
+        local y = (yPersen / 100) * viewportSize.Y;
+
+        local OffsetX = baseUI.Size.X.Offset;
+        local OffsetY = baseUI.Size.Y.Offset;
+
+        local yY = game:GetService('GuiService'):GetGuiInset().Y
+
+        local Point = {
+            TL = Vector2.new(x - (OffsetX / 2), (y + (yY / 2)) - (OffsetY / 2)),
+            BR = Vector2.new(x + (OffsetX / 2), (y + (yY / 2)) + (OffsetY / 2))
+        };
+
+        Dragging = false;
+
+        local RenderStepped;
+        RenderStepped = game:GetService('RunService').RenderStepped:Connect(function()
+            if baseUI.Parent == nil then
+                RenderStepped:Disconnect();
+                return;
+            end
+
+            local Mouse = game:GetService('Players').LocalPlayer:GetMouse();
+            local mX,mY = Mouse.X, Mouse.Y + yY
+
+            if (mX >= Point.TL.X and mX <= Point.BR.X) and (mY >= Point.TL.Y and mY <= Point.BR.Y) then
+                Dragging = true;
+            else
+                Dragging = false;
+            end
+        end)
+    end
     
     bUI = SIMP:NewInstance('Frame', {
         Parent = holder_folder,
@@ -79,133 +138,70 @@ function GUI:Setup(options)
         Visible = false
     })
 
-    if options[1]:lower() == 'loading' then
+    if options[1]:lower() == 'keys' then
         bUI = SIMP:ChangeProperties(bUI, {
             AnchorPoint = Vector2.new(0.5, 0.5),
             BackgroundColor3 = Color3.fromRGB(30, 30, 30),
-            BackgroundTransparency = 0.7,
-            Size = UDim2.new(0, 300, 0, 250),
+            BackgroundTransparency = 1,
+            Size = UDim2.new(0, 450, 0, 150),
             Position = UDim2.new(0.5, 0, 0.5, 0)
         })
 
-        table.insert(tUI, bUI)
+        table.insert(tUI, bUI);
 
         local header = SIMP:NewInstance('Frame', {
             Parent = bUI,
-            Name = 'Headers',
-            Size = UDim2.new(0.9, 0, 0, 30),
-            Position = UDim2.new(0.5, 0, 0, 0),
-            Draggable = true,
-            BackgroundColor3 = Color3.fromRGB(45, 45, 45),
-            BackgroundTransparency = 1
+            Name = 'Header',
+            BackgroundColor3 = Color3.fromRGB(60, 60, 60),
+            Size = UDim2.new(1, 0, 0, 25),
+            Position = UDim2.new(0, 0, 0, 0),
+            Visible = false
         }, {
             SIMP:NewInstance('TextLabel', {
-                Name = 'TitleUI',
-                Text = options.Title or 'Untitled',
-                TextColor3 = Color3.fromRGB(255, 255, 255),
-                AnchorPoint = Vector2.new(0.5, 0.5),
-                Position = UDim2.new(0.5, 0, 0.5, 0),
-                Draggable = true
-            }),
-            SIMP:NewInstance('ImageLabel', {
-                Name = 'LogoUI',
-                Image = 'rbxassetid://7229442422',
-                AnchorPoint = Vector2.new(0.5, 0.5),
-                Position = UDim2.new(0.5, 0, 0.5, 0),
-                Draggable = true
-            })
-        })
-
-        local body = SIMP:NewInstance('Frame', {
-            Name = 'Body',
-            Parent = bUI,
-            Size = UDim2.new(0.9, 0, 0.9, 0),
-            Position = UDim2.new(0.5, 0, 0.1, 0),
-            AnchorPoint = Vector2.new(0.5, 0.5),
-            BackgroundTransparency = 0.8,
-            BackgroundColor3 = Color3.fromRGB(45, 45, 45),
-            Draggable = true
-        }, {
-            SIMP:NewInstance('TextLabel', {
-                Name = 'Content',
-                Text = 'Please wait...',
-                TextColor3 = Color3.fromRGB(255, 255, 255),
-                AnchorPoint = Vector2.new(0.5, 0.5),
-                Position = UDim2.new(0.5, 0, 0.5, 0),
-                Draggable = true
-            }),
-
-            SIMP:NewInstance('Frame', {
-                Name = 'ProgressBar',
-                Size = UDim2.new(0,9, 0, 0, 20),
-                Position = UDim2.new(0.9, 0, 0.5, 0),
-                AnchorPoint = Vector2.new(0.5, 0.5),
-                BackgroundColor3 = Color3.fromRGB(35, 35, 35),
-                Draggable = true
-            }, {
-                SIMP:NewInstance('Frame', {
-                    Name = 'ProgressValue',
-                    Size = UDim2.new(0.5, 0, 1, 0),
-                    Position = UDim2.new(0, 0, 0, 0),
-                    BackgroundColor3 = Color3.fromRGB(50, 90, 250),
-                    Draggable = true
-                })
+                Name = 'Title',
+                Text = options.Title or 'Made by Oyen',
+                TextColor = Color3.fromRGB(255, 255, 255),
+                Position = UDim2.new(0.5, 0, 0, 0),
+                BackgroundTransparency = 0
             })
         })
 
         function tUI:Open()
-            --/ Transparent all frames /--
+            bUI.Transparency = 1;
             for _,v in pairs(bUI:GetChildren()) do
                 if v:IsA('Frame') then
-                    v.Transparency = 0
+                    v.Transparency = 1;
                 end
             end
 
-            --/ Starting opening /--
             bUI.Visible = true;
-            wait(1)
 
-            --/ Opening UI /--
+            local ts = game:GetService("TweenService"):Create(bUI, TweenInfo.new(1), {Transparency = 0})
+            ts:Play();
+            ts.Completed:wait();
+
             for _,v in pairs(bUI:GetChildren()) do
-                if v:IsA('Frame') then
-                    coroutine.wrap(coroutine.create(function()
-                        game:GetService("TweenService"):Create(v, TweenInfo.new(1), {Transparency = 1}):Play()
-                    end))
+                if v:IsA('Frame') and not v.Visible then
+                    v.Visible = true
+                    game:GetService("TweenService"):Create(v, TweenInfo.new(1), {Transparency = 0}):Play()
                 end
             end
         end
 
         function tUI:Close()
-            --/ Closing UI /--
-            for _, v in pairs(bUI:GetChildren()) do
-                if v:IsA('Frame') and v.Transparency == 1 then
-                    coroutine.wrap(coroutine.create(function()
-                        game:GetService("TweenService"):Create(v, TweenInfo.new(1), {
-                            Transparency = 0
-                        }):Play()
-                    end))
+            for _,v in pairs(bUI:GetChildren()) do
+                if v:IsA('Frame') and v.Transparency == 0 and v.Visible then
+                    game:GetService("TweenService"):Create(v, TweenInfo.new(1), {Transparency = 1}):Play()
+
+                    v.Visible = false;
                 end
             end
 
+            local ts = game:GetService("TweenService"):Create(bUI, TweenInfo.new(1), {Transparency = 1})
+            ts:Play()
+            ts.Completed:wait()
+
             bUI.Visible = false;
-        end
-
-        function tUI:setContent(txt)
-            local content = body:FindFirstChild('Content');
-            assert(content, 'Unable to get label of Content');
-            
-            content.text = txt
-        end
-
-        function tUI:setProgress(val)
-            local progressBar = body:FindFirstChild('ProgressBar')
-            local value = progressBar:FindFirstChild('ProgressValue')
-
-            local val = val or 1
-
-            SIMP:ChangeProperties(value, {
-                Size = UDim2.new(val, 0, 1, 0);
-            })
         end
     end
 
@@ -213,25 +209,22 @@ function GUI:Setup(options)
 end
 
 function UI:Uninstall()
-    if #GUI > 0 then
-        for k,v in pairs(GUI) do
-            if type(v) ~= 'function' then
-                if typeof(v) == 'Instance' then
-                    local locationInstance = "game:GetService('CoreGui')[\'" .. tostring(k) ..  "\']"
+    for k,v in pairs(GUI) do
+        if type(v) ~= 'function' then
+            if typeof(v) == 'Instance' then
+                local locationInstance = "game:GetService('CoreGui')[\'" .. tostring(k) ..  "\']"
 
-                    --/ Executing from instance location /--
-                    loadstring(locationInstance .. ':Destroy()')();
+                --/ Executing from instance location /--
+                loadstring(locationInstance .. ':Destroy()')();
 
-                    print('Destroying', locationInstance)
-                else
-                    GUI[k] = nil;
-                    print('Remove an elements on index:', k)
-                end
+                print('Remove instance on "', locationInstance, '"')
+            else
+                GUI[k] = nil;
+                print('Remove an elements on index:', k)
             end
         end
-    else
-        print('UI has been uninstalled recently or you never setup the UI?')
     end
+    print('UI has been uninstalled!')
 end
 
 return UI;
