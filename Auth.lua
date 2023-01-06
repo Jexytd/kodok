@@ -1,8 +1,7 @@
-assert(getgenv().WL, 'Key aren\'t assigned properly. Please add key before executing!')
+local SIMP = loadstring(game:HttpGet('https://raw.githubusercontent.com/Jexytd/kodok/main/SimpleCode.lua'))()
 
-function CheckKey(str, total)
-	assert(total, 'Can\'t continue the process')
-	print('Starting decryption the key...')
+function CheckKey(str)
+
 	local alphabet = {}
 	local numbers = {}
 
@@ -36,31 +35,30 @@ function CheckKey(str, total)
 		sums = sums + v;
 	end
 
-	if sums == total then
-		print('Decrypting key done!')
+	local length = game:GetService('HttpService'):JSONDecode(SIMP:Get('https://raw.githubusercontent.com/Jexytd/Oyen/main/setup.json'))['keyLength']
+	if sums == length then
+		print('Inputed key are correct!')
 		return sums
 	else
-		print('Failed to decrypting the key')
+		print('Input key incorrect, please generate new key')
 		return -1
 	end
-	return
 end
 
-local SIMP = loadstring(game:HttpGet('https://raw.githubusercontent.com/Jexytd/kodok/main/SimpleCode.lua'))()
+return CheckKey;
 
-local KeyLength = game:GetService('HttpService'):JSONDecode(SIMP:Get('https://raw.githubusercontent.com/Jexytd/Oyen/main/setup.json'))['keyLength']
-local b = CheckKey(getgenv().WL, KeyLength);
+-- local b = CheckKey(getgenv().WL, KeyLength);
 
-if KeyLength then
-	if b == KeyLength then
-		return 0;
-	end
-	if b == -1 then
-		return 1;
-	end
-	if b == nil then
-		return -1;
-	end
-end
+-- if KeyLength then
+-- 	if b == KeyLength then
+-- 		return 0;
+-- 	end
+-- 	if b == -1 then
+-- 		return 1;
+-- 	end
+-- 	if b == nil then
+-- 		return -1;
+-- 	end
+-- end
 
-return -1;
+-- return -1;
