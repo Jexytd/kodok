@@ -33,17 +33,9 @@ elseif ResponseCheck == 'UNIVERSAL' then
 end
 
 local GameStatus = {
-	Name = '',
-	Script = '';
+	Name = ResponseCheck.NAMA,
+	Script = ResponseCheck.SOURCE;
 }
-
-if GameStatus.Name ~= ResponseCheck.NAMA then
-	GameStatus.Name = ResponseCheck.NAMA;
-end
-
-if GameStatus.Script ~= ResponseCheck.SOURCE then
-	GameStatus.Script = ResponseCheck.SOURCE;
-end
 
 coroutine.wrap(coroutine.create(function()
 	local _str = '';
@@ -71,8 +63,8 @@ coroutine.wrap(coroutine.create(function()
 	GameStatus.Creator = _str;
 end))
 
-if GameStatus.Creator and GameStatus.Name ~= '' and GameStatus.Script ~= '' then
-	return GameStatus
-else
-	return -1;
+for _,v in pairs(GameStatus) do
+	if (not v or v == '') then return -1 end;
 end
+
+return GameStatus;
