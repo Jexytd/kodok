@@ -23,7 +23,7 @@ if KeyUI then
         if enterPressed then
             local guess = KeyUI:getText();
             if KeyUI.keys.TryAttempt <= 3 then
-                if SIMP:isOwn(KeyUI.keys.WrongKeys, guess) then
+                if SIMP:IsOwn(KeyUI.keys.WrongKeys, guess) then
                     print('You can\'t insert the wrong key twice!')
                     return;
                 end
