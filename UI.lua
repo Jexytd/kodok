@@ -208,8 +208,8 @@ function GUI:Setup(options)
                 Text = options.Title or 'Made by Oyen',
                 TextColor3 = Color3.fromRGB(255, 255, 255),
                 Size = UDim2.new(1, 0, 0, 0),
-                Position = UDim2.new(0.5, 0, 0.5, 0),
-                BackgroundTransparency = 0
+                Position = UDim2.new(0, 0, 0.5, 0),
+                BackgroundTransparency = 1
             })
         })
 
