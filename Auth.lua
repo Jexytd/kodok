@@ -1,6 +1,6 @@
 local SIMP = loadstring(game:HttpGet('https://raw.githubusercontent.com/Jexytd/kodok/main/SimpleCode.lua'))()
 
-function CheckKey(str)
+return (function(str)
 
 	local alphabet = {}
 	local numbers = {}
@@ -43,10 +43,7 @@ function CheckKey(str)
 		print('Input key incorrect, please generate new key')
 		return -1
 	end
-end
-
-return CheckKey;
-
+end)
 -- local b = CheckKey(getgenv().WL, KeyLength);
 
 -- if KeyLength then
