@@ -206,7 +206,7 @@ function GUI:Setup(options)
             SIMP:NewInstance('TextLabel', {
                 Name = 'Title',
                 Text = options.Title or 'Made by Oyen',
-                TextColor = Color3.fromRGB(255, 255, 255),
+                TextColor3 = Color3.fromRGB(255, 255, 255),
                 Position = UDim2.new(0.5, 0, 0, 0),
                 BackgroundTransparency = 0
             })
@@ -215,7 +215,7 @@ function GUI:Setup(options)
         local textBox = SIMP:NewInstance('TextBox', {
             Parent = bUI,
             Text = '',
-            TextColor = Color3.fromRGB(255, 255, 255),
+            TextColor3 = Color3.fromRGB(255, 255, 255),
             Name = 'Input',
             PlaceholderText = 'Insert your key here!',
             ClearTextOnFocus = true,
