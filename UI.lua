@@ -234,8 +234,6 @@ function GUI:Setup(options)
         end
 
         function tUI:setFocusLost(func)
-            textBox.FocusLost:Disconnect();
-
             local connection;
             connection = textBox.FocusLost:Connect(func);
 
