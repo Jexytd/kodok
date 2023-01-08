@@ -180,6 +180,11 @@ function GUI:Setup(options)
     })
 
     if options[1]:lower() == 'keys' then
+        tUI.keys = {
+            TryAttempt = 1,
+            WrongKeys = {}
+        };
+
         bUI = SIMP:ChangeProperties(bUI, {
             AnchorPoint = Vector2.new(0.5, 0.5),
             BackgroundColor3 = Color3.fromRGB(30, 30, 30),
@@ -209,7 +214,11 @@ function GUI:Setup(options)
 
         local textBox = SIMP:NewInstance('TextBox', {
             Parent = bUI,
+            Text = '',
+            TextColor3 = Color3.fromRGB(255, 255, 255),
             Name = 'Input',
+            PlaceholderText = 'Insert your key here!',
+            ClearTextOnFocus = true,
             Size = UDim2.new(0, 200, 0, 100),
             Position = UDim2.new(0.5, 0, 0.5, 0),
             BackgroundColor3 = Color3.fromRGB(40, 40, 40)
@@ -218,6 +227,21 @@ function GUI:Setup(options)
         --/ Frame that can be drag /--
         tUI:onDrag(header);
         tUI:onDrag(bUI);
+
+        function tUI:getText()
+            return textBox.Text;
+        end
+
+        function tUI:setFocusLost(func)
+            if textBox.FocusLost.Connected  then
+                textBox.FocusLost:Disconnect();
+            end
+
+            local connection;
+            connection = textBox.FocusLost:Connect(func);
+
+            return connection;
+        end
 
         function tUI:Open()
             bUI.Transparency = 1;
