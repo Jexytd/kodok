@@ -44,7 +44,7 @@ if KeyUI then
 
     local continue = false;
     local Fail = false;
-    repeat
+    repeat task.wait()
         if KeyUI.keys.TryAttempt > 3 then Fail = true; end
         if typeof(KeyUI.keys.akses_granted) == 'boolean' and KeyUI.keys.akses_granted then
             continue = true;
