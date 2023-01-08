@@ -74,12 +74,13 @@ function GUI:Setup(options)
 
     assert(start, 'The options not matched as on list, please select option between on the list')
 
-    --/ because if destroy old gui on setup, when creating notification will destroyed the main thing / like in-game ui
-
     local gui = GUI:Get();
     local holder_folder = gui:FindFirstChild('UI_Holder');
 
-    tUI = {};
+    tUI = {
+        CanDrag = {},
+        FocusUI = false
+    };
 
     function tUI:Get()
         for _,v in pairs(tUI) do
@@ -112,8 +113,6 @@ function GUI:Setup(options)
             BR = Vector2.new(x + (OffsetX / 2), (y + (yY / 2)) + (OffsetY / 2))
         };
 
-        Dragging = false;
-
         local RenderStepped;
         RenderStepped = game:GetService('RunService').RenderStepped:Connect(function()
             if baseUI.Parent == nil then
@@ -125,10 +124,52 @@ function GUI:Setup(options)
             local mX,mY = Mouse.X, Mouse.Y + yY
 
             if (mX >= Point.TL.X and mX <= Point.BR.X) and (mY >= Point.TL.Y and mY <= Point.BR.Y) then
-                Dragging = true;
+                tUI.FocusUI = true;
             else
-                Dragging = false;
+                tUI.FocusUI = false;
             end
+        end)
+    end
+
+    function tUI:onDrag(frame)
+        local baseUI = tUI:Get();
+
+        local dragging,dragInput,dragStart,startPos;
+        local UserInputService = game:GetService("UserInputService")
+
+        local function up(input)
+            local delta = input.Position - dragStart;
+            baseUI.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+        end
+
+        frame.InputBegan:Connect(function(input)
+            if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and tUI.FocusUI then
+                dragging = true;
+                dragStart = input.Position;
+                startPos = frame.Position;
+
+                if not SIMP:IsOwn(tUI.CanDrag, frame) then
+                    table.insert(tUI.CanDrag, frame);
+                end
+
+                input.Changed:Connect(function()
+                    if input.UserInputState == Enum.UserInputState.End then
+                        dragging = false;
+                    end
+                end)
+            end
+        end)
+
+        frame.InputChanged:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+                dragInput = input;
+            end
+        end)
+
+        UserInputService.InputChanged:Connect(function(input)
+        	if input == dragInput and dragging then
+        		up(input)
+        	end
         end)
     end
     
@@ -165,6 +206,18 @@ function GUI:Setup(options)
                 BackgroundTransparency = 0
             })
         })
+
+        local textBox = SIMP:NewInstance('TextBox', {
+            Parent = bUI,
+            Name = 'Input',
+            Size = UDim2.new(0, 200, 0, 100),
+            Position = UDim2.new(0.5, 0, 0.5, 0),
+            BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+        })
+
+        --/ Frame that can be drag /--
+        tUI:onDrag(header);
+        tUI:onDrag(bUI);
 
         function tUI:Open()
             bUI.Transparency = 1;
