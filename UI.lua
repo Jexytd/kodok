@@ -207,7 +207,8 @@ function GUI:Setup(options)
                 Name = 'Title',
                 Text = options.Title or 'Made by Oyen',
                 TextColor3 = Color3.fromRGB(255, 255, 255),
-                Position = UDim2.new(0.5, 0, 0, 0),
+                Size = UDim2.new(1, 0, 0, 0),
+                Position = UDim2.new(0.5, 0, 0.5, 0),
                 BackgroundTransparency = 0
             })
         })
@@ -219,8 +220,8 @@ function GUI:Setup(options)
             Name = 'Input',
             PlaceholderText = 'Insert your key here!',
             ClearTextOnFocus = true,
-            Size = UDim2.new(0, 200, 0, 100),
-            Position = UDim2.new(0.5, 0, 0.5, 0),
+            Size = UDim2.new(0.8, 0, 0, 30),
+            Position = UDim2.new(0, 0, 0.2, 0),
             BackgroundColor3 = Color3.fromRGB(40, 40, 40)
         })
 
@@ -234,7 +235,7 @@ function GUI:Setup(options)
 
         function tUI:setFocusLost(func)
             textBox.FocusLost:Disconnect();
-            
+
             local connection;
             connection = textBox.FocusLost:Connect(func);
 
