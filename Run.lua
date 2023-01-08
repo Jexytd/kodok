@@ -16,6 +16,8 @@ local UISettings = {
 local KeyUI = kodok:Setup(UISettings)
 
 if KeyUI then
+    KeyUI:Open();
+
     local connection;
     connection = KeyUI:setFocusLost(function(enterPressed, input)
         if enterPressed then
@@ -49,11 +51,15 @@ if KeyUI then
         end
     until continue and KeyUI.keys.TryAttempt <= 3 or Fail;
 
+    KeyUI:Close();
+
     if Fail then
         print('Unable to access the next step. Requirement not met')
         UI:Uninstall();
         return -1;
     end
+
+    kodok:Destroy()
 end
 
 -- / Send discord webhook /--

@@ -215,7 +215,7 @@ function GUI:Setup(options)
         local textBox = SIMP:NewInstance('TextBox', {
             Parent = bUI,
             Text = '',
-            TextColor3 = Color3.fromRGB(255, 255, 255),
+            TextColor = Color3.fromRGB(255, 255, 255),
             Name = 'Input',
             PlaceholderText = 'Insert your key here!',
             ClearTextOnFocus = true,
