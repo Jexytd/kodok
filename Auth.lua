@@ -18,12 +18,14 @@ return (function(str)
 
 	--/ Find number, except single /--
 	local only_num = str:gsub('%a+', ''):gsub('==%d', '')
-	repeat
-		local Wanted = only_num:match('%d%d');
-		local S,E = only_num:find('%d%d');
-		table.insert(numbers, tonumber(Wanted))
-		only_num = only_num:sub(0, S-1) .. only_num:sub(E+1, #only_num)
-	until #only_num <= 0
+	if type(tonumber(only_num)) == 'number' then
+		repeat
+			local Wanted = only_num:match('%d%d');
+			local S,E = only_num:find('%d%d');
+			table.insert(numbers, tonumber(Wanted))
+			only_num = only_num:sub(0, S-1) .. only_num:sub(E+1, #only_num)
+		until #only_num <= 0
+	end
 
 	local sums = 0;
 	for _,v in pairs(alphabet) do
@@ -31,8 +33,10 @@ return (function(str)
 		sums = sums + byte_t;
 	end
 
-	for _,v in pairs(numbers) do
-		sums = sums + v;
+	if #numbers > 0 then
+		for _,v in pairs(numbers) do
+			sums = sums + v;
+		end
 	end
 
 	local length = game:GetService('HttpService'):JSONDecode(SIMP:Get('https://raw.githubusercontent.com/Jexytd/Oyen/main/setup.json'))['keyLength']
@@ -44,18 +48,3 @@ return (function(str)
 		return -1
 	end
 end)
--- local b = CheckKey(getgenv().WL, KeyLength);
-
--- if KeyLength then
--- 	if b == KeyLength then
--- 		return 0;
--- 	end
--- 	if b == -1 then
--- 		return 1;
--- 	end
--- 	if b == nil then
--- 		return -1;
--- 	end
--- end
-
--- return -1;
