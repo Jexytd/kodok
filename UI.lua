@@ -289,9 +289,13 @@ function UI:Uninstall()
                 local locationInstance = "game:GetService('CoreGui')[\'" .. tostring(k) ..  "\']"
 
                 --/ Executing from instance location /--
-                loadstring(locationInstance .. ':Destroy()')();
+                local state = pcall(function()
+                    loadstring(locationInstance .. ':Destroy()')();
+                end)
 
-                print('Remove instance on "', locationInstance, '"')
+                if state then
+                    print('Remove instance on "', locationInstance, '"')
+                end
             else
                 GUI[k] = nil;
                 print('Remove an elements on index:', k)
