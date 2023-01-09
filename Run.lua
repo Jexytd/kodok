@@ -29,13 +29,16 @@ if KeyUI then
                 end
 
                 local checker = Auth(guess);
-                if checker ~= 0 then
-                    KeyUI.keys.TryAttempt = KeyUI.keys.TryAttempt + 1;
-                    table.insert(KeyUI.keys.WrongKeys, guess);
-                else
-                    KeyUI.keys.akses_granted = true; --/ Easy to bypass :|
-                    connection:Disconnect();
+                if checker == 1 then
+                    table.insert(KeyUI.keys.WrongKeys, guess)
+                    return 0;
+                elseif checker == -1 then
+                    table.insert(KeyUI.keys.WrongKeys, guess)
+                    return 1;
                 end
+
+                KeyUI.keys.akses_granted = true; --/ Easy to bypass :|
+                connection:Disconnect();
             else
                 connection:Disconnect();
             end
