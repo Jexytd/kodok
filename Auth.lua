@@ -25,7 +25,9 @@ return (function(str)
 			local Wanted = only_num:match('%d%d');
 			local S,E = only_num:find('%d%d');
 			table.insert(numbers, tonumber(Wanted))
-			only_num = only_num:sub(0, S-1) .. only_num:sub(E+1, #only_num)
+			if S and E then
+				only_num = only_num:sub(0, S-1) .. only_num:sub(E+1, #only_num)
+			end
 		until #only_num <= 0
 	end
 
