@@ -6,9 +6,11 @@ return (function(str)
 	local numbers = {}
 
 	local only_chars = str:gsub('%d+', ''):gsub('==', '');
-	for I = 1, #only_chars do
-		local c = only_chars:sub(I,I)
-		table.insert(alphabet, c)
+	if #only_chars > 0 then
+		for I = 1, #only_chars do
+			local c = only_chars:sub(I,I)
+			table.insert(alphabet, c)
+		end
 	end
 
 	--/ Find single number /--
@@ -28,9 +30,11 @@ return (function(str)
 	end
 
 	local sums = 0;
-	for _,v in pairs(alphabet) do
-		local byte_t = v:byte();
-		sums = sums + byte_t;
+	if #alphabet > 0 then
+		for _,v in pairs(alphabet) do
+			local byte_t = v:byte();
+			sums = sums + byte_t;
+		end
 	end
 
 	if #numbers > 0 then
