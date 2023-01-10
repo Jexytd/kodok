@@ -221,7 +221,7 @@ function GUI:Setup(options)
             PlaceholderText = 'Insert your key here!',
             ClearTextOnFocus = true,
             Size = UDim2.new(0.8, 0, 0, 30),
-            Position = UDim2.new(0, 0, 0.2, 0),
+            Position = UDim2.new(0.2, 0, 0.2, 0),
             BackgroundColor3 = Color3.fromRGB(40, 40, 40)
         })
 
