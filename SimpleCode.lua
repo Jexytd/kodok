@@ -23,7 +23,7 @@ function SIMP:New(object, properties, child)
         end
     end
 
-    for k,v in pairs(child) do
+    for k,v in pairs(child or {}) do
         if v.Parent ~= newObject.Parent then
             v.Parent = newObject;
         end
