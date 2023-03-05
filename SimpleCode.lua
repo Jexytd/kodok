@@ -33,7 +33,7 @@ function SIMP:New(object, properties, child)
 end
 
 function SIMP:Change(instance, newProperties)
-    assert(object. 'Cannot procceed an action, missing object!')
+    assert(object, 'Cannot procceed an action, missing object!')
     
     local objSetting = newProperties or {};
     for k,v in pairs(objSetting) do
