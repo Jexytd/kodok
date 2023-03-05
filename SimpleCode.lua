@@ -13,41 +13,36 @@ function SIMP:Get(URL)
     return state
 end
 
-function SIMP:NewInstance(instance, properties, children)
-    assert(instance, 'Please insert instance')
-    local instances = Instance.new(instance);
-    local properties = properties or {};
+function SIMP:New(object, properties, child)
+    local newObject = Instance.new(object);
+    local objSetting = properties or {};
 
-    for k,v in pairs(properties) do
-        instances[k] = v;
-    end
-
-    local children = children or {}
-    for k, v in pairs(children) do
-        if typeof(v) == 'Instance' then
-            v.Parent = instances
+    for k,v in pairs(objSetting) do
+        if newObject[k] then
+            newObject[k] = v;
         end
     end
 
-    return instances;
+    for k,v in pairs(child) do
+        if v.Parent ~= newObject.Parent then
+            v.Parent = newObject;
+        end
+    end
+
+    return newObject
 end
 
-function SIMP:ChangeProperties(instance, newProperties, children)
-    assert(instance, 'The instance are nil, not able to continue.')
-    assert(newProperties, 'Please insert properties to changed, on table!')
-
-    for k,v in pairs(newProperties) do
-        instance[k] = v;
-    end
-
-    local children = children or {};
-    for k,v in pairs(children) do
-        if typeof(v) == 'Instance' then
-            v.Parent = instance;
+function SIMP:Change(instance, newProperties)
+    assert(object. 'Cannot procceed an action, missing object!')
+    
+    local objSetting = newProperties or {};
+    for k,v in pairs(objSetting) do
+        if object[k] then
+            object[k] = v;
         end
     end
 
-    return instance
+    return object;
 end
 
 function SIMP:IsOwn(tab, value)
